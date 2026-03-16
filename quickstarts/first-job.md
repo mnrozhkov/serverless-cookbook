@@ -22,54 +22,42 @@ Official docs example: [Getting started with Serverless AI jobs](https://docs.ne
 
 Runs a Serverless AI job that executes `nvidia-smi` and prints GPU details from inside the container.
 
-## Why this is useful
+### Why this is useful
 
 It is the fastest way to verify quota, subnet routing, image startup, and GPU visibility before running heavier workloads.
 
-## Prerequisites
+### Prerequisites
 
 - Nebius CLI is installed and configured (see [Setup](../README.md#setup))
 - you are in a tenant group with admin permissions
 - VM quota is available (Administration -> Limits -> Quotas -> Compute -> Number of virtual machines)
 
-Check that your project configuration is present:
-
-```bash
-cat ~/.nebius/config.yaml
-```
-
-## Runtime / compute
+### Runtime / compute
 
 - image: `nvidia/cuda:13.1.1-runtime-ubuntu24.04`
-- platform: `gpu-h200-sxm`
-- preset: `1gpu-16vcpu-200gb`
+- platform: `gpu-l40s-a`
+- preset: `1gpu-8vcpu-32gb`
 - timeout: `15m`
-
-## Files
-
-- `first-job.md`: this quickstart document
 
 ## Quickstart
 
 ```bash
-SUBNET_ID=$(nebius vpc subnet get-by-name --name default-subnet \
-  --format jsonpath='{.metadata.id}')
-
 nebius ai job create \
   --name my-job \
   --image nvidia/cuda:13.1.1-runtime-ubuntu24.04 \
   --container-command bash \
   --args "-c nvidia-smi" \
-  --platform gpu-h200-sxm \
-  --preset 1gpu-16vcpu-200gb \
-  --timeout 15m \
-  --subnet-id "$SUBNET_ID"
+  --platform gpu-l40s-a \
+  --preset 1gpu-8vcpu-32gb \
+  --timeout 15m
 
 export JOB_ID=$(nebius ai job get-by-name --name my-job \
   --format jsonpath='{.metadata.id}')
 nebius ai job get "$JOB_ID"
 nebius ai logs "$JOB_ID"
 ```
+
+Note: If your organization uses custom networking, you might need to to specify `--subnet-id`. See [Network and Subnet Selection](../DEVELOPER_GUIDE.md#network-and-subnet-selection) for details.
 
 ## Expected output
 

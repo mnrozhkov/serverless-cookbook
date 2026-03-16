@@ -107,6 +107,47 @@ These include:
 
 ---
 
+## Network and Subnet Selection
+
+Use explicit `--subnet-id` when:
+
+- your org uses custom VPC/subnet layouts
+- route policy or security controls require a specific subnet
+- default subnet is unavailable in your project/region
+
+### Default subnet lookup
+
+```bash
+nebius vpc subnet get-by-name --name default-subnet \
+  --format jsonpath='{.metadata.id}'
+```
+
+### Select a non-default subnet
+
+```bash
+# list available subnets first
+nebius vpc subnet list
+
+# then provide a specific subnet ID in create command
+nebius ai job create ... --subnet-id <subnet-id>
+```
+
+### Common subnet/network failures
+
+- **No route / unreachable dependencies**: selected subnet has no required egress path.
+- **No IP allocation / capacity errors**: subnet does not have sufficient available addresses/resources.
+- **Permission failures**: wrong tenant/group/project permissions for the target subnet.
+
+Troubleshooting checks:
+
+```bash
+nebius vpc subnet list
+nebius ai job get <job-id>
+nebius ai logs <job-id>
+```
+
+---
+
 ## Troubleshooting
 
 ## Job creation appears frozen

@@ -76,6 +76,8 @@ curl -v "http://$ENDPOINT_IP" -H "Authorization: Bearer $AUTH_TOKEN"
 curl -v "http://$ENDPOINT_IP"
 ```
 
+Note: If your organization uses custom networking, you might need to to specify `--subnet-id`. See [Network and Subnet Selection](../DEVELOPER_GUIDE.md#network-and-subnet-selection) for details.
+
 ## Expected output
 
 - request with token succeeds (HTTP 200)
@@ -97,7 +99,7 @@ curl -v "http://$ENDPOINT_IP"
 View logs:
 
 ```bash
-nebius ai endpoint logs "$ENDPOINT_ID"
+nebius ai endpoint logs "$ENDPOINT_ID" --follow
 ```
 
 Optional cleanup:
