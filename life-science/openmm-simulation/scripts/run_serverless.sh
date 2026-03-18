@@ -14,7 +14,7 @@ for arg in "$@"; do
             ;;
         -h|--help)
             cat <<'EOF'
-Usage: ./run_serverless.sh [--debug] [PROTEIN_ID] [STEPS]
+Usage: ./scripts/run_serverless.sh [--debug] [PROTEIN_ID] [STEPS]
 
 Modes:
   default  Strict validation, exits if required env vars are missing.
@@ -145,5 +145,3 @@ if [ -n "$SUBNET_ID" ]; then
 fi
 
 JOB_ID="$("${CREATE_CMD[@]}")"
-
-echo "Job created: $JOB_ID"

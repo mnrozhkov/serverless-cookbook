@@ -7,7 +7,7 @@ set -e
 
 # Prevent sourcing; must be executed as a script
 if [[ "${BASH_SOURCE[0]}" != "$0" ]]; then
-  echo "Do not source this script. Run it: bash ./run_docker.sh [--debug] <PROTEIN_ID> <STEPS>" >&2
+  echo "Do not source this script. Run it: bash ./scripts/run_docker.sh [--debug] <PROTEIN_ID> <STEPS>" >&2
   return 1 2>/dev/null || exit 1
 fi
 
@@ -21,7 +21,7 @@ for arg in "$@"; do
       ;;
     -h|--help)
       cat <<'EOF'
-Usage: ./run_docker.sh [--debug] [PROTEIN_ID] [STEPS]
+Usage: ./scripts/run_docker.sh [--debug] [PROTEIN_ID] [STEPS]
 
 Modes:
   default  Strict validation, exits if required env vars are missing.
@@ -88,7 +88,7 @@ if ! docker image inspect "$IMAGE" >/dev/null 2>&1; then
   docker pull "$IMAGE"
 fi
 
-# Test local 
+# Test local
 docker run --platform linux/amd64 --rm \
   -e AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID" \
   -e AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY" \
@@ -100,7 +100,7 @@ docker run --platform linux/amd64 --rm \
 
 echo "Simulation completed!"
 
-# Test interactive 
+# Test interactive
 # docker run --platform linux/amd64 --rm -ti \
 #   --entrypoint /bin/bash \
 #   -e AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID" \

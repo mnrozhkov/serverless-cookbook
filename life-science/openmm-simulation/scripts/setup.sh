@@ -32,7 +32,7 @@ fi
 
 if [ -z "$PYTHON_BIN" ]; then
     echo "❌ Python 3.14 is required for this example." >&2
-    echo "Install Python 3.14 and rerun ./setup.sh, or set UV_PYTHON=python3.14." >&2
+    echo "Install Python 3.14 and rerun ./scripts/setup.sh, or set UV_PYTHON=python3.14." >&2
     exit 1
 fi
 
@@ -49,10 +49,10 @@ echo "To activate the environment, run:"
 echo "  source .venv/bin/activate"
 echo ""
 echo "To run a local simulation:"
-echo "  ./run_local.sh 1UBQ 1000"
+echo "  bash ./scripts/run_local.sh 1UBQ 1000"
 echo "  # OR directly:"
 echo "  python -m sim.run 1UBQ 1000"
 echo ""
 echo "To submit a serverless job:"
-echo "  ./run_serverless.sh 1UBQ 1000"
+echo "  bash ./scripts/run_serverless.sh 1UBQ 1000"
 echo ""

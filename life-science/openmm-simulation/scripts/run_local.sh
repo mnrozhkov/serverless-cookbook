@@ -41,7 +41,7 @@ elif [ -x ".venv/bin/python" ]; then
     .venv/bin/python -m sim.run "$PROTEIN_ID" "$STEPS"
 else
     echo "❌ No Python environment found for this example." >&2
-    echo "Run ./setup.sh first, then retry ./run_local.sh." >&2
+    echo "Run ./scripts/setup.sh first, then retry ./scripts/run_local.sh." >&2
     exit 1
 fi
 

@@ -1,6 +1,16 @@
+---
+title: OpenMM Serverless Molecular Dynamics with Nebius AI Jobs
+category: life-sciences
+type: batch-job
+runtime: nebius-ai-jobs
+frameworks: [openmm, python]
+keywords: [molecular-simulation, serverless-jobs, s3, cuda]
+difficulty: intermediate
+---
+
 # OpenMM Serverless Molecular Dynamics with Nebius AI Jobs
 
-**Run GPU-accelerated molecular dynamics simulations with a CLI-first workflow**
+Run GPU-accelerated molecular dynamics simulations with a CLI-first workflow.
 
 This example is intentionally **CLI only**.  
 No API server is included in this directory.
@@ -49,7 +59,7 @@ For strict S3-backed runs, see [How to Adapt: Configure Nebius Object Storage (S
 ### Setup with helper script
 
 ```bash
-./setup.sh
+bash ./scripts/setup.sh
 source .venv/bin/activate
 ```
 
@@ -88,7 +98,7 @@ export PDB_CACHE_DIR="/path/to/pdb-files"
 Or:
 
 ```bash
-./run_local.sh 1UBQ 200
+bash ./scripts/run_local.sh 1UBQ 200
 ```
 
 ---
@@ -99,7 +109,7 @@ Or:
 
 ```bash
 # Use pre-built image (default tutorial path)
-export IMAGE="mnrozhkov/openmm-serverless:v0.1.0"
+export IMAGE="mnrozhkov/openmm-serverless:v0.1.1"
 ```
 
 If you want to build and push your own image, see [How to Adapt](#how-to-adapt).
@@ -115,7 +125,7 @@ If you want to build and push your own image, see [How to Adapt](#how-to-adapt).
 Use debug mode to validate that serverless simulation runs end-to-end without setting S3 credentials.
 
 ```bash
-./run_serverless.sh --debug 1UBQ 1000
+bash ./scripts/run_serverless.sh --debug 1UBQ 1000
 ```
 
 In `--debug` mode:
@@ -131,7 +141,7 @@ Set required environment variables using [How to setup S3](#configure-nebius-obj
 Then run in default strict mode:
 
 ```bash
-./run_serverless.sh 1UBQ 1000
+bash ./scripts/run_serverless.sh 1UBQ 1000
 ```
 
 In strict mode, the script fails if required env vars are missing.
@@ -176,9 +186,9 @@ If your project has multiple subnets, append this flag inside `nebius ai job cre
 **Goal:** Reuse the same image and launch more jobs by changing args.
 
 ```bash
-./run_serverless.sh 1UBQ 1000
-./run_serverless.sh 2PTC 2000
-./run_serverless.sh 1CRN 5000
+bash ./scripts/run_serverless.sh 1UBQ 1000
+bash ./scripts/run_serverless.sh 2PTC 2000
+bash ./scripts/run_serverless.sh 1CRN 5000
 ```
 
 ---
@@ -208,17 +218,14 @@ Download one run locally:
 ```bash
 aws s3 sync "s3://$S3_BUCKET/$S3_PREFIX/<run-id>/" "./results/<run-id>/"
 ```
+
 ---
 
 ## 🧱 Project Structure
 
-- `sim.run` - simulation entrypoint and orchestration
-- `sim.utils` - structure prep and simulation helpers
-- `sim.storage` - S3 upload and storage helpers
-- `sim.metadata` - run metadata file generation
-- `run_serverless.sh` - submit job with `nebius ai job create`
-- `run_local.sh` - local execution helper
-- `run_docker.sh` - container-local validation helper
+- `scripts/` - canonical runnable scripts (`setup.sh`, `run_local.sh`, `run_serverless.sh`, `run_docker.sh`)
+- `sim/` - simulation and storage Python modules
+- `assets/` - static files and local PDB fallback cache
 
 ---
 
@@ -228,15 +235,17 @@ Use this section if you want to run with your own image repository (public or pr
 
 ### Configure Nebius Object Storage (S3)
 
-1) Create a bucket: `openmm-simulation-s3`.
+1. Create a bucket: `openmm-simulation-s3`.
 
-2) Create a service account and access key, and add the service account to `editors` group.  
+2. Create a service account and access key, and add the service account to `editors` group.  
 Follow: [Nebius Object Storage quickstart](https://docs.nebius.com/object-storage/quickstart#configure-access-credentials-and-aws-cli-settings)  
+
 At the end of this step, you should have:
+
 - `NB_ACCESS_KEY_AWS_ID`
 - `NB_SECRET_ACCESS_KEY`
 
-3) Export env vars used by this example.
+3. Export env vars used by this example.
 
 <details>
 <summary>Copy/paste example (NB_* -> AWS_*)</summary>
@@ -252,7 +261,7 @@ export S3_PREFIX="openmm"
 
 </details>
 
-4) Run AWS configuration and test bucket access.
+4. Run AWS configuration and test bucket access.
 
 ```bash
 aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID"
@@ -291,13 +300,13 @@ docker push "$CONTAINER_REGISTRY_PATH/openmm-serverless:${IMAGE_TAG}"
 
 ## 🆘 Troubleshooting
 
-**OpenMM import issues**
+### OpenMM import issues
 
 ```bash
 uv pip install --force-reinstall "openmm==8.4.0"
 ```
 
-**S3 access/upload issues**
+### S3 access/upload issues
 
 ```bash
 aws s3 ls "s3://$S3_BUCKET" --endpoint-url "$S3_ENDPOINT_URL"
