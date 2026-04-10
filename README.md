@@ -45,6 +45,7 @@ Lowest-friction first runs.
 Model training and fine-tuning workloads.
 
 - [`axolotl-finetuning`](./training/axolotl-finetuning/README.md) — get started fine-tuning with Axolotl
+- [`train-and-serve`](./training/train-and-serve/README.md) — fine-tune TinyLlama in a Job and serve it with a vLLM Endpoint
 
 ### ⚡ Inference
 Endpoint serving and batch inference workloads.
@@ -69,6 +70,7 @@ serverless-cookbook/
 │  ├─ first-endpoint.md
 ├─ training/
 │  ├─ axolotl-finetuning/
+│  ├─ train-and-serve/
 │  └─ ...
 ├─ inference/
 │  ├─ vllm-endpoint/
