@@ -56,6 +56,12 @@ test = [
     "pytest-asyncio",
 ]
 
+[dependency-groups]
+app = [
+    "streamlit>=1.35.0",
+    "plotly>=5.20.0",
+]
+
 [project.scripts]
 openmm-sim = "sim.run:main"
 
