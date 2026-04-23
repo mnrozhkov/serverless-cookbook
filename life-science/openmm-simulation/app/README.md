@@ -20,7 +20,7 @@ Opens at `http://localhost:8501`. The app loads [`.streamlit/config.toml`](.stre
 If the Nebius CLI reports **multiple subnets**, set a subnet before launching (UI: sidebar **Nebius job network**, or shell):
 
 ```bash
-export NEBIUS_SUBNET_ID="subnet-xxxxxxxx"   # or: export SUBNET_ID="..."
+export SUBNET_ID="subnet-xxxxxxxx"
 ```
 
 ## What this UI is for
@@ -44,7 +44,6 @@ This dashboard is a lightweight control panel for OpenMM runs on Nebius:
 | Tab | What happens |
 |-----|-------------|
 | **Configure & launch** | Pick a protein, set step count, preview the CLI command, submit the job |
-| **Monitor job** | Live status + log tail; auto-refreshes every 10 s while the job is active, **Refresh now** for an immediate update |
 | **Results** | Download files from S3, plot energy & temperature, compute RMSD |
 
 ## Authentication
@@ -59,7 +58,7 @@ export S3_ENDPOINT_URL="https://storage.eu-north1.nebius.cloud"
 export S3_BUCKET="openmm-simulation-s3" # Modify name, s3 bucket names should be unique
 export S3_PREFIX="openmm"
 # Optional — only if `nebius ai job create` asks for a subnet:
-# export NEBIUS_SUBNET_ID="subnet-..."
+# export SUBNET_ID="subnet-..."
 ```
 
 All fields can also be typed directly in the sidebar. Env vars are used as defaults and can be overridden per-session.

@@ -12,6 +12,8 @@ difficulty: beginner-friendly
 
 Run a GPU-accelerated protein simulation in under 5 minutes — no local GPU, no environment setup, no CUDA drivers.
 
+If this is your first run, use this exact path: **Step 2 (S3 setup) → Step 3 (launch) → Step 4 (download results)**.
+
 For **local setup**, **helper scripts** (`scripts/setup.sh`, `run_docker.sh`, `run_serverless.sh`), and deeper customization, see **[DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md)**.
 
 **How this doc is organized:** a **quick start** you can paste immediately, a short **what / why**, **prerequisites**, then **Steps 1–4** (local smoke test → S3 → GPU job → download results). After that: optional **local demos** (Streamlit + Docker), **more simulations**, **project layout**, **customization**, and **troubleshooting**.
@@ -46,13 +48,13 @@ nebius ai job create \
 
 That's it. A GPU spins up and runs the simulation. No results stored (VM and boot disk removed on completion). For **writing results to your bucket**, add the `--env` lines from [Step 3](#step-3--launch-a-gpu-job-with-persistence).
 
-> **Multiple subnets?** If the CLI says to pick a subnet, export `NEBIUS_SUBNET_ID` (or `SUBNET_ID`) and append `--subnet-id "$NEBIUS_SUBNET_ID"` to the command, or use the local Streamlit dashboard (sidebar **Nebius job network**).
+> **Multiple subnets?** If the CLI says to pick a subnet, export `SUBNET_ID` and append `--subnet-id "$SUBNET_ID"` to the command, or use the local Streamlit dashboard (sidebar **Nebius job network**).
 
 ---
 
 ### What this example does
 
-When you run **`nebius ai job create`** with `--image` and `--args`, **Nebius AI Jobs** (the control plane + worker pool) does the cloud part: it **schedules a GPU-backed run**, **pulls that OCI image** onto the worker, **starts the container**, and passes your **`--args` string to the container entrypoint** (the same arguments you would put after the image name in `docker run`).
+When you run **`nebius ai job create`** with `--image` and `--args`, Nebius AI Jobs starts a cloud worker, pulls your image, runs the container, and forwards your `--args` to the simulation command.
 
 Everything below happens **inside the running container** — your laptop does not need OpenMM or CUDA installed.
 
@@ -149,6 +151,8 @@ If your CLI is **not** configured for Nebius Object Storage and the command fail
 aws s3 ls "s3://$S3_BUCKET" --endpoint-url "${S3_ENDPOINT_URL:-https://storage.eu-north1.nebius.cloud}"
 ```
 
+Success check: the command prints your bucket contents (or no error if the bucket is empty).
+
 ---
 
 ## Step 3 — Launch a GPU job with persistence
@@ -200,6 +204,8 @@ Re-use the **Step 2** exports in this shell (or run that `export` block again in
 ```bash
 aws s3 ls "s3://$S3_BUCKET/$S3_PREFIX/"
 ```
+
+Success check: you see one or more run folders (prefixes) under `s3://$S3_BUCKET/$S3_PREFIX/`.
 
 If listing fails without an explicit endpoint, add  
 `--endpoint-url "${S3_ENDPOINT_URL:-https://storage.eu-north1.nebius.cloud}"`  
@@ -322,7 +328,7 @@ Use these after you are comfortable with the steps above — lab meetings, onboa
 | **Streamlit dashboard** | From the project root: `uv sync --group app`, then `cd app && uv run --group app streamlit run app.py` | Select protein → submit → monitor → plots from S3; reads the same env vars as the CLI |
 | **Job / Docker scripts** | `bash ./scripts/run_serverless.sh …`, `bash ./scripts/run_docker.sh …` | Scripted submit and local S3 validation — [DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md) |
 
-The Streamlit app uses a bright theme, **hot-reloads** when you edit `app.py` (see `app/.streamlit/config.toml`), and passes `--subnet-id` when `NEBIUS_SUBNET_ID` / `SUBNET_ID` is set. See [`app/README.md`](app/README.md) for a short UI tour.
+The Streamlit app uses a bright theme, **hot-reloads** when you edit `app.py` (see `app/.streamlit/config.toml`), and passes `--subnet-id` when `SUBNET_ID` is set. See [`app/README.md`](app/README.md) for a short UI tour.
 
 ---
 
@@ -334,4 +340,4 @@ The Streamlit app uses a bright theme, **hot-reloads** when you edit `app.py` (s
 | Job completes but no S3 results | Check that all `AWS_*` and `S3_*` env vars are set and the bucket exists |
 | `ImportError: openmm` locally | `uv pip install --force-reinstall "openmm==8.4.0"` |
 | Job fails at PDB fetch | Start with the bundled `1UBQ` — it works offline |
-| `multiple subnets found` / subnet error on submission | Export `NEBIUS_SUBNET_ID` or `SUBNET_ID`, then add `--subnet-id "$NEBIUS_SUBNET_ID"` to `job create` (Streamlit sidebar: **Nebius job network**) |
+| `multiple subnets found` / subnet error on submission | Export `SUBNET_ID`, then add `--subnet-id "$SUBNET_ID"` to `job create` (Streamlit sidebar: **Nebius job network**) |

@@ -114,7 +114,7 @@ bash ./scripts/run_docker.sh 1UBQ 200
 ```
 
 - **Default:** exits if `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_DEFAULT_REGION`, `S3_BUCKET`, `S3_PREFIX`, or `S3_ENDPOINT_URL` is missing.
-- **`--debug`:** warns but continues (upload may fail or be incomplete).
+- **`--debug` (diagnostic only):** warns but continues (upload may fail or be incomplete). Do not use this mode for researcher-facing "golden path" runs.
 
 ```bash
 bash ./scripts/run_docker.sh --debug 1UBQ 200
@@ -141,13 +141,13 @@ docker run --rm \
 
 **Goal:** End-to-end job on Nebius AI Jobs **without** S3 (ephemeral disk only).
 
-### Script (debug — no strict S3)
+### Script (debug — diagnostic only, no strict S3)
 
 ```bash
 bash ./scripts/run_serverless.sh --debug 1UBQ 200
 ```
 
-In `--debug`, missing S3/AWS env vars are warnings; results may be **lost** when the job completes.
+In `--debug`, missing S3/AWS env vars are warnings; results may be **lost** when the job completes. Use it only for troubleshooting.
 
 ### Equivalent (manual minimal job)
 

@@ -108,8 +108,7 @@ def _env_or(key: str, default: str = "") -> str:
 def _subnet_from_env() -> str:
     """Nebius: use when the CLI reports multiple subnets."""
     return (
-        os.getenv("NEBIUS_SUBNET_ID", "").strip()
-        or os.getenv("SUBNET_ID", "").strip()
+        os.getenv("SUBNET_ID", "").strip()
     )
 
 
@@ -761,7 +760,7 @@ def render_sidebar():
             "Subnet ID",
             key="subnet_id",
             placeholder="e.g. subnet-…",
-            help="Set NEBIUS_SUBNET_ID or SUBNET_ID in the environment, or paste here.",
+            help="Set SUBNET_ID in the environment, or paste here.",
         )
 
     c = _creds()
