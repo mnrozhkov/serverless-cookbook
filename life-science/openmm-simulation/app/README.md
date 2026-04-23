@@ -56,7 +56,7 @@ export AWS_ACCESS_KEY_ID="..."
 export AWS_SECRET_ACCESS_KEY="..."
 export AWS_DEFAULT_REGION="eu-north1"
 export S3_ENDPOINT_URL="https://storage.eu-north1.nebius.cloud"
-export S3_BUCKET="openmm-simulation-s3"
+export S3_BUCKET="openmm-simulation-s3" # Modify name, s3 bucket names should be unique
 export S3_PREFIX="openmm"
 # Optional — only if `nebius ai job create` asks for a subnet:
 # export NEBIUS_SUBNET_ID="subnet-..."
